@@ -1,6 +1,6 @@
 {
- "name": "draw-the-characters-fong-chung-sir",
-  "version": "1.0.0",
+ "name": "draw-the-Word-fong-chung-sir",
+  "version": "1.1.0",
   "description": "Learn how to write 'sir' in Traditional Chinese'",
   "main": "main.js",
   "scripts": {
