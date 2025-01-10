@@ -1,7 +1,7 @@
 {
-  "name": "fong-sir-game",
+ "name": "draw-the-characters-fong-chung-sir",
   "version": "1.0.0",
-  "description": "方中sir點寫遊戲",
+  "description": "Learn how to write 'sir' in Traditional Chinese'",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -10,11 +10,11 @@
   "author": "Dundd2",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^latest",
-    "electron-builder": "^latest"
+    "electron": "^25.0.0",
+    "electron-builder": "^24.4.0"
   },
   "build": {
-    "appId": "com.fong.sir.game", 
+    "appId": "com.fong.sir.game",
     "win": {
       "target": "nsis",
       "icon": "./assets/images/icon.ico"

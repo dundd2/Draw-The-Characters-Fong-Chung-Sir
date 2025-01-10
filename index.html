@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
-    <title>方中sir點寫</title>
+    <title>Draw-The-Characters-Fong-Chung-Sir</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Draw-The-Characters-Fong-Chung-Sir">
+    <meta name="description" content="Learn how to write 'sir' in Traditional Chinese">
+    <meta name="keywords" content="方中sir,新紮師妹,Love Undercover,2002">
+    <!-- Mobile Web App -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Writing Sir">
+    <meta name="theme-color" content="#2ecc71">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./assets/images/icon.png">
+    <link rel="apple-touch-icon" href="./assets/images/icon.png">
+
     <style>
         body {
             font-family: 'Segoe UI', Roboto, sans-serif;
@@ -363,25 +376,140 @@
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.8);
         }
+
+        .message-overlay {
+            position: fixed;
+            top: calc(100% - 150px); /* Position at bottom of screen */
+            left: 50%;
+            transform: translate(-50%, 0);
+            z-index: 1000;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none; /* Prevent blocking interactions */
+            transition: opacity 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-overlay.show {
+            opacity: 1;
+            animation: messagePopup 2s ease-out;
+        }
+
+        .success-image {
+            position: fixed;
+            top: 50%;  /* Change from bottom to top */
+            left: 50%;
+            transform: translate(-50%, -50%);  /* Center both vertically and horizontally */
+            max-width: 300px;  /* Increased size slightly */
+            display: none;
+            z-index: 1001;
+            pointer-events: none; /* Prevent blocking interactions */
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.5);
+        }
+
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(46, 204, 113, 0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .success-overlay.show {
+            opacity: 1;
+        }
+
+        @keyframes messagePopup {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .language-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .language-switch:hover {
+            transform: translateY(-2px);
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        [lang="en"], [lang="zh"] {
+            display: none;
+        }
+
+        [lang].active {
+            display: block;
+        }
     </style>
+    <script src="assets/tfjs@latest.js"></script>
 </head>
 <body>
+    <button class="language-switch" onclick="toggleLanguage()">中文 / English</button>
+    
     <div class="container">
-        <h1 class="rainbow-title">方中sir點寫</h1>
+        <h1 class="rainbow-title" lang="en">Draw The Traditional Chinese Characters "Sir"</h1>
+        <h1 class="rainbow-title" lang="zh">點寫方中sir?</h1>
+        
         <div class="header-content">
-            <img src="./assets/images/title-image.jpg" alt="方中sir" class="title-image">
+            <img src="./assets/images/title-image.jpg" alt="Mr. Fong" class="title-image">
             <div class="story-container">
-                <div class="dialogue">
-                    <span class="speaker">親家老爺:</span> 係啦 你個女就姓方嘅 點解你又叫自己做鍾sir呢？
+                <!-- English Version -->
+                <div lang="en">
+                    <div class="dialogue">
+                        <span class="speaker">Father-in-law:</span> Well, your daughter's surname is Fong, why do you call yourself Mr. Chung?
+                    </div>
+                    <div class="dialogue">
+                        <span class="speaker">Mr. Fong:</span> You see, Chung sir is my name. My full name is Fong Chung sir, Fong Chung Shun is also our relative~
+                    </div>
+                    <div class="dialogue">
+                        <span class="speaker">Father-in-law:</span> Oh! By the way, how do you write "sir"?
+                    </div>
+                    <div class="dialogue">
+                        <span class="speaker">Fong Chung sir:</span> Oh! The character "sir": ...
+                    </div>
+                    <div class="dialogue">
+                        <span class="speaker">-From "Love Undercover" 2002</span>
+                    </div>
                 </div>
-                <div class="dialogue">
-                    <span class="speaker">方中sir:</span> 係咁嘅 其實鍾sir係我個名 其實我全名叫方鍾sir 方中信都係我地啲親戚黎嘅
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">親家老爺:</span> 喔 啊 借問聲 個sir字點寫呢?
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">方鍾sir:</span> 喔 個sir字啊 (寫寫寫)
+
+                <!-- Chinese Version -->
+                <div lang="zh">
+                    <div class="dialogue">
+                        <span class="speaker">親家老爺:</span> 係啦，你個女就姓方嘅，點解你又叫自己做鍾sir呢？
+                    </div>
+                    <div class="dialogue">
+                        <span class="speaker">方中sir:</span> 係咁嘅，其實鍾sir係我個名，其實我全名叫方鍾sir，方中信都係我地啲親戚黎嘅~
+                    </div>
+                    <div class="dialogue">
+                        <span class="speaker">親家老爺:</span> 喔!啊...借問聲，個sir字點寫呢?
+                    </div>
+                    <div class="dialogue">
+                        <span class="speaker">方鍾sir:</span> 喔!個sir字啊: ...
+                    </div>
+                    <div class="dialogue">
+                        <span class="speaker">-《新紮師妹》2002</span> 
+                    </div>
                 </div>
             </div>
         </div>
@@ -401,10 +529,11 @@
                         <input type="number" id="lineWidth" class="line-width" value="3" min="1" max="10" title="線條寬度">
                     </div>
                     <div class="button-group">
-                        <button id="undoButton" title="撤銷上一步">↩ 撤銷</button>
-                        <button id="resetButton" title="重置畫布">🔄 重置</button>
+                        <button id="undoButton" title="上一步">↩</button>
+                        <button id="resetButton" title="重置畫布">🔄</button>
                     </div>
-                    <button id="submitButton" class="submit-btn">提交作品</button>
+                    <button id="submitButtonZh" class="submit-btn" lang="zh">提交</button>
+                    <button id="submitButtonEn" class="submit-btn" lang="en">Submit</button>
                     <div id="feedback"></div>
                     <div id="score">得分: 0%</div>
                 </div>
@@ -415,11 +544,16 @@
     <div class="angry-emoji">😡</div>
     <div class="fail-overlay"></div>
 
-    <a href="https://github.com/yourusername/yourrepository" class="github-link" target="_blank">
+    <div class="message-overlay" id="messageOverlay"></div>
+    <div class="success-overlay" id="successOverlay"></div>
+    <img src="./assets/images/success.jpg" alt="Success" class="success-image" id="successImage">
+
+    <a href="https://github.com/dundd2/Draw-The-Characters-Fong-Chung-Sir" class="github-link" target="_blank">
         <svg class="github-icon" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
         </svg>
-        查看源碼
+        <span lang="en">Source Code</span>
+        <span lang="zh">源代碼</span>
     </a>
 
     <script>
@@ -432,7 +566,8 @@
         const undoButton = document.getElementById('undoButton');
         const colorPicker = document.getElementById('colorPicker');
         const lineWidth = document.getElementById('lineWidth');
-        const submitButton = document.getElementById('submitButton');
+        const submitButtonZh = document.getElementById('submitButtonZh');
+        const submitButtonEn = document.getElementById('submitButtonEn');
 
         let drawing = false;
         let points = [];
@@ -454,63 +589,64 @@
         });
 
         // Set target character
-        const targetCharacter = `+*+:                                                                                          
-                               #(                                               
-                          /%%%%%%&(       (*          *%%######%(               
-                      %%%%%%%%#,      &%%%%%&   %#%%#%%%%%%#%%%%%%%%            
-                    %%%%%,           .%%%%%    ##%##            *%%%            
-                    %%%%%%%,.          %%%&                     #%%%            
-                       ###%%%#        .%%%*                   #%%#%             
-                          %%%%,       (%%%         #%&      #%##(               
-                       %%%%%#         %%%%#,       %#%.   ((%#*                 
-                    #%###%#       (%%%#%%%&        %%% &%%%%%%%%#%%%%           
-                                  ,%%%/           *%%#            %%%%,         
-                         %%&*(%%&%%%%             %#%%           .%%##          
-                        &%%%% *(&%%%%&            ###%          %%%%%           
-                        %%%%    %%#&&             ###%       (#####             
-                       #%%%  &%%%%%              ,###.    /#%###%               
-                       ##%(  /#%%%%%&.           #%##  /##%##%                  
-                      ##%%       /%%%%&%         %##%,####*                     
-                      #%#    %#%&        (%#%%%%%%%#%                           
-                      .      %%%%%%##%######%%#  %##%                           
-                          (%%%%%%%##%##          ####                           
-                   .%#%##%%%#%%%%                ###(                           
-              &%%%%%##%#%. %%%%%%               .###/                           
-       %%%%%%%%%%%%.    *%%%%%%%&%%%%%%#.       ,###*                           
-      ,#%%%%%%        .%%%##%%%%*   #%%%%%%%(   /###.                           
-                     %%%%%  %#%#         %%%%.  (###.                           
-                            &%%%.               %#%#                            
-                             %%#                %###                            
-                                                %#%#                           `; // Replace with your character
+        const targetCharacter = `                                                                                       
+                          #(                                               
+                  /%%%%%%&(       (*          *%%######%(               
+              %%%%%%%%#,      &%%%%%&   %#%%#%%%%%%#%%%%%%%%            
+            %%%%%,           .%%%%%    ##%##            *%%%            
+            %%%%%%%,.          %%%&                     #%%%            
+               ###%%%#        .%%%*                   #%%#%             
+                  %%%%,       (%%%         #%&      #%##(               
+               %%%%%#         %%%%#,       %#%.   ((%#*                 
+            #%###%#       (%%%#%%%&        %%% &%%%%%%%%#%%%%           
+                          ,%%%/           *%%#            %%%%,         
+                 %%&*(%%&%%%%             %#%%           .%%##          
+                &%%%% *(&%%%%&            ###%          %%%%%           
+               %%%%    %%#&&             ###%       (#####             
+               #%%%  &%%%%%              ,###.    /#%###%               
+               ##%(  /#%%%%%&.           #%##  /##%##%                  
+              ##%%       /%%%%&%         %##%,####*                     
+              #%#    %#%&        (%#%%%%%%%#%                           
+              .      %%%%%%##%######%%#  %##%                           
+                  (%%%%%%%##%##          ####                           
+           .%#%##%%%#%%%%                ###(                           
+      &%%%%%##%#%. %%%%%%               .###/                           
+ %%%%%%%%%%%%.    *%%%%%%%&%%%%%%#.       ,###*                           
+,#%%%%%%        .%%%##%%%%*   #%%%%%%%(   /###.                           
+             %%%%%  %#%#         %%%%.  (###.                           
+                    &%%%.               %#%#                            
+                     %%#                %###                            
+`;
         targetCharacterDiv.innerHTML = `<pre>${targetCharacter}</pre>`;
+
+        function getMousePos(canvas, evt) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (evt.clientX - rect.left) * scaleX,
+                y: (evt.clientY - rect.top) * scaleY
+            };
+        }
 
         function startDrawing(e) {
             drawing = true;
             points = [];
-            const rect = canvas.getBoundingClientRect();
-            lastPoint = {
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
-            };
+            const pos = getMousePos(canvas, e);
+            lastPoint = pos;
             ctx.beginPath();
-            ctx.moveTo(lastPoint.x, lastPoint.y);
+            ctx.moveTo(pos.x, pos.y);
         }
 
         function draw(e) {
             if (!drawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const currentPoint = {
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
-            };
-
+            const pos = getMousePos(canvas, e);
             ctx.beginPath();
             ctx.moveTo(lastPoint.x, lastPoint.y);
-            ctx.lineTo(currentPoint.x, currentPoint.y);
+            ctx.lineTo(pos.x, pos.y);
             ctx.stroke();
-
-            points.push(currentPoint);
-            lastPoint = currentPoint;
+            points.push(pos);
+            lastPoint = pos;
         }
 
         function stopDrawing() {
@@ -519,53 +655,101 @@
             strokeHistory.push([...points]);
         }
 
-        function calculateScore(points) {
-            if (points.length === 0) return 0;
-            
-            // 使用更寬鬆的容差值來比較像素
-            const tolerance = 20; // 增加容差值
-            
-            // 創建臨時canvas來比較形狀
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = canvas.width;
-            tempCanvas.height = canvas.height;
-            const tempCtx = tempCanvas.getContext('2d');
-            
-            // 繪製用戶的輸入，使用較粗的線條
-            tempCtx.strokeStyle = 'black';
-            tempCtx.lineWidth = 5; // 增加線寬
-            tempCtx.beginPath();
-            tempCtx.moveTo(points[0].x, points[0].y);
-            points.forEach(point => {
-                tempCtx.lineTo(point.x, point.y);
+        // Add these utility functions before calculateScore
+        function preprocessCanvas(canvas) {
+            return tf.tidy(() => {
+                // Convert canvas to tensor
+                let tensor = tf.browser.fromPixels(canvas, 1);
+                
+                // Resize to 28x28
+                tensor = tf.image.resizeBilinear(tensor, [28, 28]);
+                
+                // Normalize values to [0, 1]
+                tensor = tensor.toFloat().div(tf.scalar(255));
+                
+                // Add batch dimension
+                return tensor.expandDims(0);
             });
-            tempCtx.stroke();
+        }
+
+        function aggregatePointsFromStrokeHistory(strokes) {
+            const allPoints = [];
+
+            // Draw user strokes
+            userCtx.fillStyle = 'white';
+            userCtx.fillRect(0, 0, canvas.width, canvas.height);
+            userCtx.strokeStyle = 'black';
+            userCtx.lineWidth = 3;
+            userCtx.lineCap = 'round';
+            userCtx.lineJoin = 'round';
             
-            // 比較像素重疊度
-            const userPixels = tempCtx.getImageData(0, 0, canvas.width, canvas.height).data;
-            const targetPixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-            
+            strokeHistory.forEach(stroke => {
+                if (stroke.length > 0) {
+                    userCtx.beginPath();
+                    userCtx.moveTo(stroke[0].x, stroke[0].y);
+                    stroke.forEach(point => userCtx.lineTo(point.x, point.y));
+                    userCtx.stroke();
+                }
+            });
+
+            // Get image data
+            const refData = refCtx.getImageData(0, 0, canvas.width, canvas.height).data;
+            const userData = userCtx.getImageData(0, 0, canvas.width, canvas.height).data;
+
             let matchingPixels = 0;
-            let totalRelevantPixels = 0;
-            
-            for (let i = 0; i < userPixels.length; i += 4) {
-                // 只考慮非完全透明的像素
-                if (userPixels[i + 3] > 0 || targetPixels[i + 3] > 0) {
-                    totalRelevantPixels++;
-                    // 使用更寬鬆的比較標準
-                    if (Math.abs(userPixels[i + 3] - targetPixels[i + 3]) < tolerance) {
-                        matchingPixels++;
+            let totalTargetPixels = 0;
+            let extraPixels = 0;
+            const tolerance = 8; // Increased tolerance
+
+            // Compare pixels with tolerance
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
+                    const i = (y * canvas.width + x) * 4;
+                    const isRefBlack = refData[i] < 200; // Relaxed threshold for black
+                    const isUserBlack = userData[i] < 200;
+
+                    if (isRefBlack) {
+                        totalTargetPixels++;
+                        // Check surrounding pixels
+                        let matched = false;
+                        for (let dy = -tolerance; dy <= tolerance && !matched; dy++) {
+                            for (let dx = -tolerance; dx <= tolerance && !matched; dx++) {
+                                const ni = ((y + dy) * canvas.width + (x + dx)) * 4;
+                                if (ni >= 0 && ni < userData.length && userData[ni] < 200) {
+                                    matched = true;
+                                    matchingPixels++;
+                                }
+                            }
+                        }
+                    } else if (isUserBlack) {
+                        // Check if this black pixel is near any reference black pixel
+                        let nearTarget = false;
+                        for (let dy = -tolerance; dy <= tolerance && !nearTarget; dy++) {
+                            for (let dx = -tolerance; dx <= tolerance && !nearTarget; dx++) {
+                                const ni = ((y + dy) * canvas.width + (x + dx)) * 4;
+                                if (ni >= 0 && ni < refData.length && refData[ni] < 200) {
+                                    nearTarget = true;
+                                }
+                            }
+                        }
+                        if (!nearTarget) {
+                            extraPixels++;
+                        }
                     }
                 }
             }
+
+            // Calculate weighted score with adjusted weights and scaling
+            const coverage = matchingPixels / (totalTargetPixels || 1);
+            const precision = 1 - (extraPixels / (totalTargetPixels || 1));
             
-            // 計算加權分數
-            let score = (matchingPixels / Math.max(totalRelevantPixels, 1)) * 100;
+            // Adjust weights to emphasize coverage more than precision
+            const weightedScore = (coverage * 0.8 + Math.max(0, precision) * 0.2) * 100;
+
+            // Scale the score to make it more achievable
+            const scaledScore = Math.min(100, Math.max(0, weightedScore * 1.5));
             
-            // 調整分數範圍，使其更合理
-            score = Math.min(100, score * 1.5); // 提高分數上限
-            
-            return score;
+            return scaledScore;
         }
 
         function getBoundingBox(points) {
@@ -599,36 +783,61 @@
         }
 
         function provideFeedback(score) {
+            const isEnglish = document.documentElement.lang === 'en';
             if (score > 70) {
-                feedbackDiv.textContent = "親家老爺:(望完)原來個sir字都有得寫嘅 真係活到老 學到老 ";
+                feedbackDiv.textContent = isEnglish ? 
+                    "Father-in-law: So 'sir' can be written like this! You learn something new every day!" :
+                    "親家老爺:原來個sir字都有得寫嘅 真係活到老 學到老 ";
                 feedbackDiv.style.color = "green";
             } else if (score > 50) {
-                feedbackDiv.textContent = "親家老爺:(望完)原來個sir字都有得寫嘅 真係活到老 學到老 ";
+                feedbackDiv.textContent = isEnglish ?
+                    "Father-in-law: Interesting way to write 'sir'!" :
+                    "親家老爺:原來個sir字都有得寫嘅 真係活到老 學到老 ";
                 feedbackDiv.style.color = "orange";
             } else {
-                feedbackDiv.textContent = "死警察！";
+                feedbackDiv.textContent = isEnglish ?
+                    "So you're a police officer! 🔫" :
+                    "原來你係警察🔫!!！";
                 feedbackDiv.style.color = "red";
             }
         }
 
+        function showSuccessEffect() {
+            const isEnglish = document.documentElement.lang === 'en';
+            const successOverlay = document.getElementById('successOverlay');
+            const messageOverlay = document.getElementById('messageOverlay');
+            const successImage = document.getElementById('successImage');
+
+            successOverlay.classList.add('show');
+            messageOverlay.innerHTML = isEnglish ?
+                "It turns out that the word sir can be written! Learning never ends! 🤓" :
+                "原來個sir字都有得寫嘅 真係活到老 學到老！ 🤓";
+            messageOverlay.classList.add('show');
+            successImage.style.display = 'block';
+
+            setTimeout(() => {
+                successOverlay.classList.remove('show');
+                messageOverlay.classList.remove('show');
+                successImage.style.display = 'none';
+            }, 3000);
+        }
+
         function showFailureEffect() {
-            const angryEmoji = document.querySelector('.angry-emoji');
+            const isEnglish = document.documentElement.lang === 'en';
             const failOverlay = document.querySelector('.fail-overlay');
+            const messageOverlay = document.getElementById('messageOverlay');
             const container = document.querySelector('.container');
 
-            // 顯示憤怒表情
-            angryEmoji.classList.add('show');
             failOverlay.classList.add('show');
+            messageOverlay.innerHTML = isEnglish ?
+                "So you're a police officer! 🔫 😡" :
+                "原來你係警察🔫!!！😡";
+            messageOverlay.classList.add('show');
             container.classList.add('game-over');
 
-            // 播放失敗音效
-            const failSound = new Audio('https://example.com/fail-sound.mp3'); // 替換成您的音效URL
-            failSound.play().catch(e => console.log('無法播放音效'));
-
-            // 3秒後移除效果
             setTimeout(() => {
-                angryEmoji.classList.remove('show');
                 failOverlay.classList.remove('show');
+                messageOverlay.classList.remove('show');
                 container.classList.remove('game-over');
             }, 3000);
         }
@@ -638,18 +847,27 @@
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseout', stopDrawing);
 
-        submitButton.addEventListener('click', () => {
-            let score = calculateScore(points);
-            scoreDiv.textContent = `得分: ${score.toFixed(0)}%`;
-            scoreDiv.classList.add('visible');
-            
-            if (score < 50) {
-                showFailureEffect();
-                feedbackDiv.textContent = "死警察！";
-                feedbackDiv.style.color = "#e74c3c";            } else {
-                provideFeedback(score);
-            }
-        });
+        function handleSubmit() {
+            calculateScore().then(score => {
+                const isEnglish = document.documentElement.lang === 'en';
+                scoreDiv.textContent = isEnglish ? `Score: ${score.toFixed(0)}%` : `得分: ${score.toFixed(0)}%`;
+                scoreDiv.classList.add('visible');
+                
+                if (score < 50) {
+                    showFailureEffect();
+                    feedbackDiv.textContent = isEnglish ? 
+                        "So you're a police officer! 🔫" : 
+                        "原來你係警察🔫!!！";
+                    feedbackDiv.style.color = "#e74c3c";
+                } else {
+                    showSuccessEffect();
+                    provideFeedback(score);
+                }
+            });
+        }
+
+        submitButtonZh.addEventListener('click', handleSubmit);
+        submitButtonEn.addEventListener('click', handleSubmit);
 
         resetButton.addEventListener('click', () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -659,6 +877,8 @@
             scoreDiv.classList.remove('visible');
             const container = document.querySelector('.container');
             container.classList.remove('game-over');
+            const isEnglish = document.documentElement.lang === 'en';
+            scoreDiv.textContent = isEnglish ? 'Score: 0%' : '得分: 0%';
         });
 
         undoButton.addEventListener('click', () => {
@@ -675,6 +895,156 @@
                 });
             }
         });
+
+        function toggleLanguage() {
+            const currentLang = document.documentElement.lang;
+            const newLang = currentLang === 'en' ? 'zh' : 'en';
+            document.documentElement.lang = newLang;
+            
+            // Toggle active class on language elements
+            document.querySelectorAll('[lang]').forEach(el => {
+                if (el.getAttribute('lang') === newLang) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+
+            // Update score text based on language
+            const score = scoreDiv.textContent.match(/\d+/);
+            if (score) {
+                scoreDiv.textContent = newLang === 'en' ? `Score: ${score[0]}%` : `得分: ${score[0]}%`;
+            } else {
+                scoreDiv.textContent = newLang === 'en' ? 'Score: 0%' : '得分: 0%';
+            }
+        }
+
+        // Initialize language
+        document.addEventListener('DOMContentLoaded', () => {
+            const userLang = navigator.language || navigator.userLanguage;
+            const initialLang = userLang.startsWith('zh') ? 'zh' : 'en';
+            document.documentElement.lang = initialLang;
+            
+            // Update initial score text based on language
+            scoreDiv.textContent = initialLang === 'en' ? 'Score: 0%' : '得分: 0%';
+            
+            document.querySelectorAll(`[lang="${initialLang}"]`).forEach(el => {
+                el.classList.add('active');
+            });
+        });
+
+        function calculateScore() {
+            return new Promise((resolve) => {
+                const userCanvas = document.createElement('canvas');
+                userCanvas.width = canvas.width;
+                userCanvas.height = canvas.height;
+                const userCtx = userCanvas.getContext('2d');
+                
+                // Draw current canvas content to user canvas
+                userCtx.fillStyle = 'white';
+                userCtx.fillRect(0, 0, canvas.width, canvas.height);
+                userCtx.drawImage(canvas, 0, 0);
+                
+                // Create reference canvas with target character
+                const refCanvas = document.createElement('canvas');
+                refCanvas.width = canvas.width;
+                refCanvas.height = canvas.height;
+                const refCtx = refCanvas.getContext('2d');
+                
+                // Draw target character to reference canvas
+                refCtx.fillStyle = 'white';
+                refCtx.fillRect(0, 0, refCanvas.width, refCanvas.height);
+                refCtx.fillStyle = 'black';
+                refCtx.font = '250px monospace'; // Increased font size
+                refCtx.textAlign = 'center';
+                refCtx.textBaseline = 'middle';
+                refCtx.fillText('sir', refCanvas.width/2, refCanvas.height/2);
+
+                // Compare the canvases
+                const allStrokes = strokeHistory.flat();
+                if (allStrokes.length === 0) {
+                    resolve(0);
+                    return;
+                }
+
+                // Get image data
+                const refData = refCtx.getImageData(0, 0, refCanvas.width, refCanvas.height).data;
+                const userData = userCtx.getImageData(0, 0, userCanvas.width, userCanvas.height).data;
+
+                let matchingPixels = 0;
+                let totalTargetPixels = 0;
+                let extraPixels = 0;
+                const tolerance = 6; // Increased tolerance
+
+                // Compare pixels with more lenient thresholds
+                for (let y = 0; y < canvas.height; y += 2) { // Sample every other pixel
+                    for (let x = 0; x < canvas.width; x += 2) {
+                        const i = (y * canvas.width + x) * 4;
+                        const isRefBlack = refData[i] < 128; // More lenient threshold
+                        const isUserBlack = userData[i] < 128;
+
+                        if (isRefBlack) {
+                            totalTargetPixels++;
+                            let matched = false;
+                            
+                            // Check surrounding pixels
+                            for (let dy = -tolerance; dy <= tolerance && !matched; dy++) {
+                                for (let dx = -tolerance; dx <= tolerance && !matched; dx++) {
+                                    const ny = y + dy;
+                                    const nx = x + dx;
+                                    if (ny >= 0 && ny < canvas.height && nx >= 0 && nx < canvas.width) {
+                                        const ni = (ny * canvas.width + nx) * 4;
+                                        if (userData[ni] < 128) {
+                                            matched = true;
+                                            matchingPixels++;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (isUserBlack) {
+                            let nearTarget = false;
+                            
+                            // Check if user's black pixel is near any reference black pixel
+                            for (let dy = -tolerance; dy <= tolerance && !nearTarget; dy++) {
+                                for (let dx = -tolerance; dx <= tolerance && !nearTarget; dx++) {
+                                    const ny = y + dy;
+                                    const nx = x + dx;
+                                    if (ny >= 0 && ny < canvas.height && nx >= 0 && nx < canvas.width) {
+                                        const ni = (ny * canvas.width + nx) * 4;
+                                        if (refData[ni] < 128) {
+                                            nearTarget = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            if (!nearTarget) {
+                                extraPixels++;
+                            }
+                        }
+                    }
+                }
+
+                // Calculate final score with adjusted weights
+                const coverage = matchingPixels / (totalTargetPixels || 1);
+                const precision = Math.max(0, 1 - (extraPixels / Math.max(totalTargetPixels * 2, 1))); // More lenient precision
+                
+                // Weighted score calculation with more emphasis on coverage
+                const rawScore = (coverage * 0.7 + precision * 0.3) * 100;
+                
+                // Apply scaling to make scores more reasonable
+                let finalScore = rawScore;
+                if (finalScore > 30) {
+                    // Boost scores above 30% to make it easier to get higher scores
+                    finalScore = 30 + (finalScore - 30) * 1.5;
+                }
+                
+                // Clamp score between 0 and 100
+                resolve(Math.min(100, Math.max(0, Math.round(finalScore))));
+            });
+        }
+
     </script>
 </body>
 </html>

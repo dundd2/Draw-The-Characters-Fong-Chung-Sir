@@ -5,6 +5,7 @@ function createWindow () {
   const win = new BrowserWindow({
     width: 1280,
     height: 720,
+    icon: path.join(__dirname, 'assets/images/icon.ico'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -16,6 +17,9 @@ function createWindow () {
   
   // 移除選單欄
   win.setMenuBarVisibility(false)
+  
+  // Open DevTools in development
+  // win.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
