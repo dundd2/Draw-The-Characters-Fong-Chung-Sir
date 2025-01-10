@@ -7,7 +7,7 @@ Here, you will cosplay as Chung Sir, a.k.a. Fong Chung Sir, to write the charact
 Enjoy the game in either English or Traditional Chinese!
 
 ## Screenshot
-![Screenshot](https://github.com/dundd2/Draw-The-Word-Fong-Chung-Sir/blob/main/Screenshot/Screenshot%20(1).gif)
+![Screenshot](https://github.com/dundd2/Draw-the-Word-Fong-Chung-Sir/blob/main/assets/Screenshot/Screenshot%20(1).gif)
 
 ## How to Access the Game
 
