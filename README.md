@@ -7,8 +7,7 @@ Here, you will cosplay as Chung Sir, a.k.a. Fong Chung Sir, to write the charact
 Enjoy the game in either English or Traditional Chinese!
 
 ## Screenshot
-![Screenshot](https://github.com/dundd2/Draw-The-Word-Fong-Chung-Sir/blob/main/Screenshot/Screenshot%20(1).png)
-![Screenshot](https://github.com/dundd2/Draw-The-Word-Fong-Chung-Sir/blob/main/Screenshot/Screenshot%20(2).png)
+![Screenshot](https://github.com/dundd2/Draw-The-Word-Fong-Chung-Sir/blob/main/Screenshot/Screenshot%20(1).gif)
 
 ## How to Access the Game
 
@@ -45,10 +44,31 @@ The standalone executable is built using **Electron**, allowing for a cross-plat
 *   **HTML:**  For structuring the webpage.
 *   **CSS:** For styling the visual elements and layout.
 *   **JavaScript:** For implementing the drawing functionality, user interaction, and scoring.
+*   **TensorFlow.js:** For image processing and pattern recognition in drawing evaluation.
+*   **Electron:** For building and packaging the cross-platform desktop application.
 
+## Technical Details
+
+### Drawing Canvas
+The drawing canvas is implemented using the HTML5 `<canvas>` element. Users can draw on the canvas using mouse or touch events. The drawing strokes are captured and stored in an array for further processing.
+
+### Scoring Algorithm
+The scoring algorithm uses TensorFlow.js to compare the user's drawing with the target character. The steps involved are:
+1. **Preprocessing**: The canvas content is converted to a tensor and resized to 28x28 pixels.
+2. **Normalization**: The pixel values are normalized to the range [0, 1].
+3. **Pattern Matching**: The user's drawing is compared with the target character using image processing techniques to calculate a similarity score.
+
+### User Interface
+The user interface is built with HTML and CSS, providing a responsive and interactive experience. Key features include:
+- **Color Picker**: Allows users to select the drawing color.
+- **Line Width Selector**: Enables users to adjust the thickness of their drawing strokes.
+- **Undo and Reset Buttons**: Provide controls to undo the last stroke or reset the entire canvas.
+
+## Credits
+  - TensorFlow.js: Image processing and pattern recognition
+    - [TensorFlow.js](https://www.tensorflow.org/js) is an open-source library developed by the TensorFlow team at Google. Licensed under the [Apache License 2.0](https://github.com/tensorflow/tfjs/blob/master/LICENSE).
+  - Electron: Cross-platform desktop application framework
+    - [Electron](https://www.electronjs.org/) is an open-source framework maintained by OpenJS Foundation. Licensed under the [MIT License](https://github.com/electron/electron/blob/main/LICENSE).
 
 ## 📜 License
-
 This project is licensed under the MIT LICENSE.
-
-to do :lost bgm ,win bgm ,score count,readme flie

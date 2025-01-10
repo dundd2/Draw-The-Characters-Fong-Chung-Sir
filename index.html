@@ -34,10 +34,10 @@
 
         .container {
             text-align: center;
-            padding: 20px;  /* 減少內邊距 */
-            max-width: 1200px;  /* 增加最大寬度 */
+            padding: 20px;  
+            max-width: 1200px;  
             width: 98%;
-            margin: 10px auto;  /* 減少上下邊距 */
+            margin: 10px auto;  
             background-color: white;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -96,6 +96,7 @@
             background: #ffffff;
             width: 350px;
             height: 350px;
+            touch-action: none;
         }
 
         #feedback {
@@ -555,6 +556,12 @@
         <span lang="en">Source Code</span>
         <span lang="zh">源代碼</span>
     </a>
+    <audio id="winSound" preload="auto">
+        <source src="./assets/sounds/win.mp3" type="audio/mp3">
+    </audio>
+    <audio id="loseSound" preload="auto">
+        <source src="./assets/sounds/lose.mp3" type="audio/mp3">
+    </audio>
 
     <script>
         const canvas = document.getElementById('drawingCanvas');
@@ -638,22 +645,114 @@
             ctx.moveTo(pos.x, pos.y);
         }
 
-        function draw(e) {
-            if (!drawing) return;
-            const pos = getMousePos(canvas, e);
-            ctx.beginPath();
-            ctx.moveTo(lastPoint.x, lastPoint.y);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
-            points.push(pos);
-            lastPoint = pos;
+        // Add stroke smoothing variables
+        let smoothedPoints = [];
+        const smoothingFactor = 0.2;
+
+        // Helper function to get touch position
+        function getTouchPos(canvas, evt) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (evt.touches[0].clientX - rect.left) * scaleX,
+                y: (evt.touches[0].clientY - rect.top) * scaleY
+            };
         }
 
+        // Smoothing function
+        function smoothPoints(points) {
+            if (points.length < 3) return points;
+            
+            const smoothed = [];
+            smoothed.push(points[0]);
+            
+            for (let i = 1; i < points.length - 1; i++) {
+                const prevPoint = points[i - 1];
+                const currentPoint = points[i];
+                const nextPoint = points[i + 1];
+                
+                const smoothedX = currentPoint.x + smoothingFactor * (
+                    (prevPoint.x + nextPoint.x) / 2 - currentPoint.x
+                );
+                const smoothedY = currentPoint.y + smoothingFactor * (
+                    (prevPoint.y + nextPoint.y) / 2 - currentPoint.y
+                );
+                
+                smoothed.push({ x: smoothedX, y: smoothedY });
+            }
+            
+            smoothed.push(points[points.length - 1]);
+            return smoothed;
+        }
+
+        // Modified draw function with smoothing
+        function draw(e) {
+            if (!drawing) return;
+            e.preventDefault();
+            
+            const pos = e.type.includes('touch') ? getTouchPos(canvas, e) : getMousePos(canvas, e);
+            points.push(pos);
+            
+            // Apply smoothing if we have enough points
+            if (points.length > 2) {
+                smoothedPoints = smoothPoints(points);
+                
+                // Clear the previous line segment
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Redraw all previous strokes
+                strokeHistory.forEach(stroke => {
+                    if (stroke.length > 0) {
+                        ctx.beginPath();
+                        ctx.moveTo(stroke[0].x, stroke[0].y);
+                        stroke.forEach(point => ctx.lineTo(point.x, point.y));
+                        ctx.stroke();
+                    }
+                });
+                
+                // Draw current stroke
+                ctx.beginPath();
+                ctx.moveTo(smoothedPoints[0].x, smoothedPoints[0].y);
+                for (let i = 1; i < smoothedPoints.length; i++) {
+                    ctx.lineTo(smoothedPoints[i].x, smoothedPoints[i].y);
+                }
+                ctx.stroke();
+            }
+        }
+
+        // Modified stop drawing function
         function stopDrawing() {
             if (!drawing) return;
             drawing = false;
-            strokeHistory.push([...points]);
+            if (points.length > 0) {
+                strokeHistory.push(smoothedPoints.length > 0 ? [...smoothedPoints] : [...points]);
+            }
+            points = [];
+            smoothedPoints = [];
         }
+
+        // Add touch event listeners
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            drawing = true;
+            points = [];
+            smoothedPoints = [];
+            const pos = getTouchPos(canvas, e);
+            lastPoint = pos;
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        });
+
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('touchcancel', stopDrawing);
+
+        // Keep existing mouse event listeners
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
 
         // Add these utility functions before calculateScore
         function preprocessCanvas(canvas) {
@@ -687,8 +786,8 @@
                 if (stroke.length > 0) {
                     userCtx.beginPath();
                     userCtx.moveTo(stroke[0].x, stroke[0].y);
-                    stroke.forEach(point => userCtx.lineTo(point.x, point.y));
-                    userCtx.stroke();
+                    stroke.forEach(point => ctx.lineTo(point.x, point.y));
+                    ctx.stroke();
                 }
             });
 
@@ -772,7 +871,7 @@
         }
 
         function getTargetBoundingBox() {
-            // 分析目標字符的邊界
+           
             const target = targetCharacterDiv.getBoundingClientRect();
             return {
                 x: target.left,
@@ -807,6 +906,11 @@
             const successOverlay = document.getElementById('successOverlay');
             const messageOverlay = document.getElementById('messageOverlay');
             const successImage = document.getElementById('successImage');
+            const winSound = document.getElementById('winSound');
+
+            // Play win sound
+            winSound.currentTime = 0; // Reset sound to start
+            winSound.play().catch(err => console.log('Error playing sound:', err));
 
             successOverlay.classList.add('show');
             messageOverlay.innerHTML = isEnglish ?
@@ -827,6 +931,11 @@
             const failOverlay = document.querySelector('.fail-overlay');
             const messageOverlay = document.getElementById('messageOverlay');
             const container = document.querySelector('.container');
+            const loseSound = document.getElementById('loseSound');
+
+            // Play lose sound
+            loseSound.currentTime = 0; // Reset sound to start
+            loseSound.play().catch(err => console.log('Error playing sound:', err));
 
             failOverlay.classList.add('show');
             messageOverlay.innerHTML = isEnglish ?
@@ -841,11 +950,6 @@
                 container.classList.remove('game-over');
             }, 3000);
         }
-
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseout', stopDrawing);
 
         function handleSubmit() {
             calculateScore().then(score => {
@@ -933,88 +1037,89 @@
             });
         });
 
+        // Replace the calculateScore function with this improved version
         function calculateScore() {
             return new Promise((resolve) => {
-                const userCanvas = document.createElement('canvas');
-                userCanvas.width = canvas.width;
-                userCanvas.height = canvas.height;
-                const userCtx = userCanvas.getContext('2d');
-                
-                // Draw current canvas content to user canvas
-                userCtx.fillStyle = 'white';
-                userCtx.fillRect(0, 0, canvas.width, canvas.height);
-                userCtx.drawImage(canvas, 0, 0);
-                
-                // Create reference canvas with target character
                 const refCanvas = document.createElement('canvas');
-                refCanvas.width = canvas.width;
-                refCanvas.height = canvas.height;
+                const userCanvas = document.createElement('canvas');
+                refCanvas.width = userCanvas.width = canvas.width;
+                refCanvas.height = userCanvas.height = canvas.height;
                 const refCtx = refCanvas.getContext('2d');
-                
-                // Draw target character to reference canvas
+                const userCtx = userCanvas.getContext('2d');
+
+                // Draw reference pattern
                 refCtx.fillStyle = 'white';
                 refCtx.fillRect(0, 0, refCanvas.width, refCanvas.height);
                 refCtx.fillStyle = 'black';
-                refCtx.font = '250px monospace'; // Increased font size
-                refCtx.textAlign = 'center';
-                refCtx.textBaseline = 'middle';
-                refCtx.fillText('sir', refCanvas.width/2, refCanvas.height/2);
+                const lines = targetCharacter.split('\n');
+                const cellHeight = refCanvas.height / lines.length;
+                const cellWidth = refCanvas.width / lines[0].length;
+                
+                lines.forEach((line, y) => {
+                    [...line].forEach((char, x) => {
+                        if (char === '#') {
+                            refCtx.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                        }
+                    });
+                });
 
-                // Compare the canvases
-                const allStrokes = strokeHistory.flat();
-                if (allStrokes.length === 0) {
-                    resolve(0);
-                    return;
-                }
+                // Draw user strokes with thicker lines
+                userCtx.fillStyle = 'white';
+                userCtx.fillRect(0, 0, canvas.width, canvas.height);
+                userCtx.strokeStyle = 'black';
+                userCtx.lineWidth = 5; // Increased line width
+                userCtx.lineCap = 'round';
+                userCtx.lineJoin = 'round';
+                
+                strokeHistory.forEach(stroke => {
+                    if (stroke.length > 0) {
+                        userCtx.beginPath();
+                        userCtx.moveTo(stroke[0].x, stroke[0].y);
+                        stroke.forEach(point => userCtx.lineTo(point.x, point.y));
+                        userCtx.stroke();
+                    }
+                });
 
                 // Get image data
-                const refData = refCtx.getImageData(0, 0, refCanvas.width, refCanvas.height).data;
-                const userData = userCtx.getImageData(0, 0, userCanvas.width, userCanvas.height).data;
+                const refData = refCtx.getImageData(0, 0, canvas.width, canvas.height).data;
+                const userData = userCtx.getImageData(0, 0, canvas.width, canvas.height).data;
 
                 let matchingPixels = 0;
                 let totalTargetPixels = 0;
                 let extraPixels = 0;
-                const tolerance = 6; // Increased tolerance
+                const tolerance = 12; // Increased tolerance
 
-                // Compare pixels with more lenient thresholds
-                for (let y = 0; y < canvas.height; y += 2) { // Sample every other pixel
-                    for (let x = 0; x < canvas.width; x += 2) {
+                // Compare pixels with tolerance
+                for (let y = 0; y < canvas.height; y++) {
+                    for (let x = 0; x < canvas.width; x++) {
                         const i = (y * canvas.width + x) * 4;
-                        const isRefBlack = refData[i] < 128; // More lenient threshold
-                        const isUserBlack = userData[i] < 128;
+                        const isRefBlack = refData[i] < 200;
+                        const isUserBlack = userData[i] < 200;
 
                         if (isRefBlack) {
                             totalTargetPixels++;
+                            // Check surrounding pixels with larger area
                             let matched = false;
-                            
-                            // Check surrounding pixels
                             for (let dy = -tolerance; dy <= tolerance && !matched; dy++) {
                                 for (let dx = -tolerance; dx <= tolerance && !matched; dx++) {
-                                    const ny = y + dy;
-                                    const nx = x + dx;
-                                    if (ny >= 0 && ny < canvas.height && nx >= 0 && nx < canvas.width) {
-                                        const ni = (ny * canvas.width + nx) * 4;
-                                        if (userData[ni] < 128) {
+                                    if (dx * dx + dy * dy <= tolerance * tolerance) { // Circular tolerance area
+                                        const ni = ((y + dy) * canvas.width + (x + dx)) * 4;
+                                        if (ni >= 0 && ni < userData.length && userData[ni] < 200) {
                                             matched = true;
                                             matchingPixels++;
-                                            break;
                                         }
                                     }
                                 }
                             }
                         } else if (isUserBlack) {
+                            // Check if this black pixel is near any reference black pixel
                             let nearTarget = false;
-                            
-                            // Check if user's black pixel is near any reference black pixel
                             for (let dy = -tolerance; dy <= tolerance && !nearTarget; dy++) {
                                 for (let dx = -tolerance; dx <= tolerance && !nearTarget; dx++) {
-                                    const ny = y + dy;
-                                    const nx = x + dx;
-                                    if (ny >= 0 && ny < canvas.height && nx >= 0 && nx < canvas.width) {
-                                        const ni = (ny * canvas.width + nx) * 4;
-                                        if (refData[ni] < 128) {
+                                    if (dx * dx + dy * dy <= tolerance * tolerance) { // Circular tolerance area
+                                        const ni = ((y + dy) * canvas.width + (x + dx)) * 4;
+                                        if (ni >= 0 && ni < refData.length && refData[ni] < 200) {
                                             nearTarget = true;
-                                            break;
                                         }
                                     }
                                 }
@@ -1026,22 +1131,29 @@
                     }
                 }
 
-                // Calculate final score with adjusted weights
+                // Calculate base scores
                 const coverage = matchingPixels / (totalTargetPixels || 1);
-                const precision = Math.max(0, 1 - (extraPixels / Math.max(totalTargetPixels * 2, 1))); // More lenient precision
+                const precision = 1 - Math.min(1, (extraPixels / (totalTargetPixels || 1)));
                 
-                // Weighted score calculation with more emphasis on coverage
-                const rawScore = (coverage * 0.7 + precision * 0.3) * 100;
+                // Apply non-linear scaling to make scores more achievable
+                const scaledCoverage = Math.pow(coverage, 0.7) * 100; // Makes it easier to get higher coverage scores
+                const scaledPrecision = Math.pow(Math.max(0, precision), 0.5) * 100; // More forgiving for precision
                 
-                // Apply scaling to make scores more reasonable
-                let finalScore = rawScore;
-                if (finalScore > 30) {
-                    // Boost scores above 30% to make it easier to get higher scores
-                    finalScore = 30 + (finalScore - 30) * 1.5;
+                // Weight the components (more emphasis on coverage)
+                const weightedScore = (scaledCoverage * 0.8 + scaledPrecision * 0.2);
+                
+                // Apply final scaling and bonus points
+                let finalScore = Math.min(100, weightedScore * 1.3); // Boost scores by 30%
+                
+                // Add bonus points for having both good coverage and precision
+                if (coverage > 0.6 && precision > 0.3) {
+                    finalScore += 10; // Bonus points for balanced drawing
                 }
                 
-                // Clamp score between 0 and 100
-                resolve(Math.min(100, Math.max(0, Math.round(finalScore))));
+                // Ensure maximum score is 100
+                finalScore = Math.min(100, Math.max(0, finalScore));
+                
+                resolve(Math.round(finalScore));
             });
         }
 

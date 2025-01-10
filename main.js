@@ -12,10 +12,8 @@ function createWindow () {
     }
   })
 
-  // 載入 index.html
   win.loadFile('index.html')
   
-  // 移除選單欄
   win.setMenuBarVisibility(false)
   
   // Open DevTools in development
