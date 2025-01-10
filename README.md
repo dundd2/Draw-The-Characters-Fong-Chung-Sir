@@ -1,20 +1,29 @@
 # Draw-The-Characters-Fong-Chung-Sir
 
-## Play now
-Play it online on: https://dundd2.github.io/Draw-The-Characters-Fong-Chung-Sir/
+This parody web page based Mini Game is based on HTML, CSS, and JavaScript and allows users to draw the word  "sir" in traditional Chinese. This "sir" character is not a real character in Traditional Chinese. Instead, it originates from the 2002 movie *Love Undercover* (新紮師妹). In the movie, Chung Sir creates this unique Chinese "SIR" character as an excuse for a triad boss when trying to pass himself off as the "father" of Fong Lai-Kuan, needing to explain their different surnames.
 
-## How to write the Traditional Chinese character "sir" in Fong Chung Sir style?
+Here, you will cosplay as Chung Sir, a.k.a. Fong Chung Sir, to write the character "sir" in Traditional Chinese. You still need to try and draw the character correctly! If your score is too low, the triads will know you are an Undercover police officer👮!
 
-This is a parody webpage based on HTML, CSS, and JavaScript, allowing users to draw the character "sir" in Traditional Chinese. This "sir" character is not a real character in Traditional Chinese. Instead, it originates from the 2002 movie *Love Undercover* (新紮師妹). In the movie, Chung Sir creates this unique Chinese "SIR" character as an excuse to a triad boss when trying to pass himself off as the "father" of Fong Lai-Kuan, needing to explain their different surnames.
+Enjoy the game in either English or Traditional Chinese!
 
-Here, you will cosplay as Chung Sir, a.k.a. Fong Chung Sir, to write the character "sir" in Traditional Chinese. You still need to try and draw the character correctly! If your score is too low, the triads will know you are a Undercover police officer👮!
+## 📸 Screenshots:
+![SC(1)](https://github.com/user-attachments/assets/688abfb3-fa05-4c73-a17e-55f019c53c95)
+![SC(2)](https://github.com/user-attachments/assets/f0ad59e8-e4c9-4f0e-9965-1773a3b822f3)
 
+## How to Play
 
-## Using Executable
-via electron
- Download the latest release:
-   - Get `draw-the-characters-fong-chung-sir Setup 1.0.0.exe` from the Releases page
-   - Simply double-click to install and run.
+You can play "Draw-The-characters-Fong-Chung-Sir" in two ways:
+
+**1. Play Online (Recommended):**
+
+   - Simply visit this link in your web browser: [https://dundd2.github.io/Draw-the-Word-Fong-Chung-Sir/](https://dundd2.github.io/Draw-the-Word-Fong-Chung-Sir/)
+
+**2. Play Offline (Standalone Application):**
+The standalone executable is built using **Electron**, allowing for a cross-platform desktop experience.
+
+   - **Download the Installer:** Get the latest installer from the Releases page. Download the file named `draw-the-characters-fong-chung-sir Setup 1.0.0.exe`.
+   - **Install:** Double-click the downloaded `.exe` file and follow the installation prompts.
+   - **Run:**  Launch the game after installation from your Start Menu or desktop.
 
 ## How to Play
 
@@ -22,7 +31,7 @@ via electron
 2. **Draw the Character:** Use your mouse or touch to draw on the white canvas, attempting to replicate the target character.
     *   **Click and drag** to draw lines.
 3. **Customize Your Drawing (Optional):**
-    *   Use the **color picker** to select your desired drawing color.
+    *   Use the **colour picker** to select your desired drawing colour.
     *   Adjust the **line width** to control the thickness of your strokes.
 4. **Use the Controls:**
     *   Click the **"↩ Undo** button to remove your last drawing stroke.
